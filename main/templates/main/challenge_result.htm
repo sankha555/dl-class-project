@@ -1,0 +1,40 @@
+{% extends "main/base.htm" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  body {
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRns5ZsqUq986RDetuCcCzwaG14MaBHilekkA&usqp=CAU");
+    background-repeat:no-repeat;
+    background-size:111%;
+  }
+
+  .jumbotron {
+    opacity: 0.9;
+  }
+</style>
+
+{% if result == "passed" %}
+<div class="jumbotron my-auto" style="background-color: lightgreen">
+  <h1 class="display-4">Hello there! :))</h1>
+  <p class="lead">
+    {{ message }}
+  </p>
+  <hr class="my-4">
+  <p>
+    You were recognized as <b>user {{ config.identified_username }}</b> with a confidence of {{ config.confidence }}%. 
+  </p>
+</div>
+{% else %}
+<div class="jumbotron my-auto" style="background-color: lightcoral">
+  <h1 class="display-4">Oops! :(</h1>
+  <p class="lead">
+    {{ message }}
+  </p>
+  <hr class="my-4">
+  <p>
+    You were rather recognized as <b>user {{ config.identified_username }}</b> with a confidence of {{ config.confidence }}%. 
+  </p>
+</div>
+{% endif %}
+
+{% endblock content %}
