@@ -17,29 +17,35 @@ def train_model():
     labels = []
 
     for username in USERNAMES:
+        if username == '.DS_Store':
+            continue
+        
         user_images = TRAINING_IMAGES / username
         
-        try:
-            for file in os.listdir(user_images):
-                image_path = user_images / file
-                image = cv.imread(image_path)
-                
-                grayscale_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-                features.append(grayscale_image)
-                labels.append(int(username))
-        except:
-            continue
+        for file in os.listdir(user_images):
+            image_path = str(user_images / file)
+            image = cv.imread(image_path)
+            
+            grayscale_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+            features.append(grayscale_image)
+            labels.append(int(username))
+        # except:
+        #     continue
             
     feature_vector = np.array(features, dtype='object')
     label_vector = np.array(labels)
+    
+    if feature_vector == [] or label_vector == []:
+        feature_vector = np.load('feature_vector.npy', allow_pickle=True)
+        label_vector = np.load('label_vector.npy')
 
     face_recognition_model = cv.face.LBPHFaceRecognizer_create()
     face_recognition_model.train(feature_vector, label_vector)
 
 
-    face_recognition_model.save(MAIN_DIR / 'recognition_model/face_recognition.yml')
-    np.save(MAIN_DIR / 'recognition_model/feature_vector.npy', feature_vector)
-    np.save(MAIN_DIR / 'recognition_model/label_vector.npy', label_vector)
+    face_recognition_model.save(str(MAIN_DIR / 'recognition_model/face_recognition.yml'))
+    np.save(str(MAIN_DIR / 'recognition_model/feature_vector.npy'), feature_vector)
+    np.save(str(MAIN_DIR / 'recognition_model/label_vector.npy'), label_vector)
 
 def model_loaded():
     for file in ['feature_vector.npy', 'label_vector.npy', 'face_recognition.yml']:

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from main.face_recognizer import prediction, read_image, train_model
 from django.conf import settings
+from django.contrib import messages
 
 import os
 
@@ -100,6 +101,8 @@ def register_user(request):
                 continue
             
         train_model()
+        
+        messages.success(request, "Image uploaded successfully!", fail_silently=True)
         
         return redirect('verify_user')
             
